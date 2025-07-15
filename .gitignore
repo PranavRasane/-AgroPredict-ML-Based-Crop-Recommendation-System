@@ -1,0 +1,1 @@
+-e ".venv/\n__pycache__/\n.vscode/\nnode_modules/\n*.pyc\n*.ipynb_checkpoints/" 
