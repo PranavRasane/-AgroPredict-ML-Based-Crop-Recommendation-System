@@ -5,15 +5,21 @@ import os
 
 app = Flask(__name__)
 
-# Load model and scaler
+# Vercel-specific model loading
 try:
-    with open('model.pkl', 'rb') as f:
+    # Use absolute paths for Vercel
+    model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
+    scaler_path = os.path.join(os.path.dirname(__file__), 'scaler.pkl')
+    
+    with open(model_path, 'rb') as f:
         model = pickle.load(f)
-    with open('scaler.pkl', 'rb') as f:
+    with open(scaler_path, 'rb') as f:
         scaler = pickle.load(f)
     print("✅ Model and scaler loaded successfully!")
 except Exception as e:
     print(f"❌ Error loading model: {e}")
+    model = None
+    scaler = None
 
 @app.route('/')
 def home():
@@ -21,6 +27,9 @@ def home():
 
 @app.route("/predict", methods=['POST'])
 def predict():
+    if model is None or scaler is None:
+        return render_template('index.html', result="❌ Model not loaded properly")
+    
     try:
         # Get form data
         N = int(request.form['Nitrogen'])
