@@ -1,171 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Crop Recommendation System</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroPredict - Smart Crop Recommendation</title>
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
-      crossorigin="anonymous"
     />
+    <style>
+      :root {
+        --primary-color: #28a745;
+        --secondary-color: #20c997;
+        --background-gradient: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 100%
+        );
+      }
+
+      body {
+        background: var(--background-gradient);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 20px 0;
+      }
+
+      .main-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        margin: 20px auto;
+        padding: 40px;
+        max-width: 1200px;
+      }
+
+      .header-section {
+        text-align: center;
+        margin-bottom: 40px;
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .header-section h1 {
+        font-weight: 800;
+        font-size: 3rem;
+        margin-bottom: 10px;
+      }
+
+      .header-section .lead {
+        font-size: 1.3rem;
+        color: #6c757d;
+        font-weight: 500;
+      }
+
+      .form-section {
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid var(--secondary-color);
+        display: inline-block;
+      }
+
+      .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+      }
+
+      .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+      }
+
+      .input-hint {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 5px;
+        font-style: italic;
+      }
+
+      .submit-btn {
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        border: none;
+        border-radius: 50px;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+      }
+
+      .result-card {
+        background: linear-gradient(135deg, #e8f5e8, #f0f9ff);
+        border: 3px solid var(--primary-color);
+        border-radius: 15px;
+        padding: 30px;
+        margin-top: 30px;
+        text-align: center;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2c5530;
+        box-shadow: 0 10px 30px rgba(40, 167, 69, 0.2);
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .feature-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid var(--primary-color);
+        transition: transform 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 40px;
+        color: #6c757d;
+        font-size: 0.9rem;
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .main-container {
+          margin: 10px;
+          padding: 20px;
+        }
+
+        .header-section h1 {
+          font-size: 2.2rem;
+        }
+      }
+    </style>
   </head>
-  <style>
-    h1 {
-      color: mediumseagreen;
-      text-align: center;
-    }
+  <body>
+    <div class="main-container">
+      <!-- Header -->
+      <div class="header-section">
+        <h1>🌱 AgroPredict</h1>
+        <p class="lead">Intelligent Crop Recommendation System</p>
+        <p>
+          Enter your soil and weather conditions to discover the perfect crop
+          for cultivation
+        </p>
+      </div>
 
-    .warning {
-      color: red;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .card {
-      margin-left: 410px;
-      margin-top: 20px;
-      color: white;
-    }
-
-    .container {
-      background: #edf2f7;
-      font-weight: bold;
-      padding-bottom: 10px;
-      border-radius: 15px;
-    }
-  </style>
-
-  <body style="background: #bcbbb8">
-    <!--=======================main content=================================================-->
-    <div class="container my-3 mt-3">
-      <h1 class="text-success">
-        Crop Recommendation System <span class="text-success">🌱</span>
-      </h1>
-
-      <!-- Form for crop prediction -->
+      <!-- Main Form -->
       <form action="/predict" method="POST">
+        <!-- Soil Nutrients Section -->
+        <div class="form-section">
+          <h3 class="section-title">🌿 Soil Nutrient Levels</h3>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="feature-card">
+                <label class="form-label">Nitrogen (N) Content</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="Nitrogen"
+                  placeholder="e.g., 90"
+                  required
+                  min="0"
+                  max="150"
+                />
+                <div class="input-hint">
+                  Essential for leaf growth and green color
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="feature-card">
+                <label class="form-label">Phosphorus (P) Content</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="Phosporus"
+                  placeholder="e.g., 42"
+                  required
+                  min="0"
+                  max="150"
+                />
+                <div class="input-hint">Important for root development</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="feature-card">
+                <label class="form-label">Potassium (K) Content</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="Potassium"
+                  placeholder="e.g., 43"
+                  required
+                  min="0"
+                  max="150"
+                />
+                <div class="input-hint">Supports overall plant health</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather Conditions Section -->
+        <div class="form-section">
+          <h3 class="section-title">☀️ Environmental Conditions</h3>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="feature-card">
+                <label class="form-label">Temperature (°C)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  class="form-control"
+                  name="Temperature"
+                  placeholder="e.g., 25.5"
+                  required
+                  min="-10"
+                  max="50"
+                />
+                <div class="input-hint">Average temperature in Celsius</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="feature-card">
+                <label class="form-label">Humidity (%)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  class="form-control"
+                  name="Humidity"
+                  placeholder="e.g., 65.5"
+                  required
+                  min="0"
+                  max="100"
+                />
+                <div class="input-hint">Relative humidity percentage</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="feature-card">
+                <label class="form-label">Soil pH Value</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  class="form-control"
+                  name="Ph"
+                  placeholder="e.g., 6.5"
+                  required
+                  min="0"
+                  max="14"
+                />
+                <div class="input-hint">Acidity/alkalinity (0-14 scale)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rainfall Section -->
+        <div class="form-section">
+          <h3 class="section-title">💧 Water Availability</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="feature-card">
+                <label class="form-label">Annual Rainfall (mm)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  class="form-control"
+                  name="Rainfall"
+                  placeholder="e.g., 202.9"
+                  required
+                  min="0"
+                  max="500"
+                />
+                <div class="input-hint">Yearly rainfall in millimeters</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
         <div class="row">
-          <div class="col-md-4">
-            <label for="Nitrogen">Nitrogen</label>
-            <input
-              type="number"
-              id="Nitrogen"
-              name="Nitrogen"
-              placeholder="Enter Nitrogen"
-              class="form-control"
-              required
-              step="0"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="Phosporus">Phosphorus</label>
-            <input
-              type="number"
-              id="Phosporus"
-              name="Phosporus"
-              placeholder="Enter Phosphorus"
-              class="form-control"
-              required
-              step="00"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="Potassium">Potassium</label>
-            <input
-              type="number"
-              id="Potassium"
-              name="Potassium"
-              placeholder="Enter Potassium"
-              class="form-control"
-              required
-              step="0"
-            />
-          </div>
-        </div>
-
-        <div class="row mt-4">
-          <div class="col-md-4">
-            <label for="Temperature">Temperature</label>
-            <input
-              type="number"
-              step="0.01"
-              id="Temperature"
-              name="Temperature"
-              placeholder="Enter Temperature in °C"
-              class="form-control"
-              required
-              step="0"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="Humidity">Humidity</label>
-            <input
-              type="number"
-              step="0.01"
-              id="Humidity"
-              name="Humidity"
-              placeholder="Enter Humidity in %"
-              class="form-control"
-              required
-              step="0"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="pH">pH</label>
-            <input
-              type="number"
-              step="0.01"
-              id="Ph"
-              name="Ph"
-              placeholder="Enter pH value"
-              class="form-control"
-              required
-              step="0"
-            />
-          </div>
-        </div>
-
-        <div class="row mt-4">
-          <div class="col-md-4">
-            <label for="Rainfall">Rainfall</label>
-            <input
-              type="number"
-              step="0.01"
-              id="Rainfall"
-              name="Rainfall"
-              placeholder="Enter Rainfall in mm"
-              class="form-control"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="row mt-4">
           <div class="col-md-12 text-center">
-            <button type="submit" class="btn btn-primary btn-lg">
-              Get Recommendation
+            <button type="submit" class="submit-btn">
+              🚀 Get Smart Crop Recommendation
             </button>
           </div>
         </div>
       </form>
 
-      <!-- Display result -->
+      <!-- Results Display -->
       {% if result %}
-      <div class="card bg-dark" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Recommended Crop for cultivation is:</h5>
-          <p class="card-text">{{ result }}</p>
-        </div>
-      </div>
+      <div class="result-card">{{ result }}</div>
       {% endif %}
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>AgroPredict - Empowering Farmers with AI Technology 🌾</p>
+        <p>Built with Machine Learning & Flask</p>
+      </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
