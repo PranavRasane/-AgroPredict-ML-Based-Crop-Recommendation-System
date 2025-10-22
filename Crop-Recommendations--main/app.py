@@ -7,11 +7,13 @@ app = Flask(__name__)
 
 # Load model and scaler
 try:
-    model = pickle.load(open('model.pkl', 'rb'))
-    scaler = pickle.load(open('scaler.pkl', 'rb'))
-    print("✅ Model loaded successfully!")
+    with open('model.pkl', 'rb') as f:
+        model = pickle.load(f)
+    with open('scaler.pkl', 'rb') as f:
+        scaler = pickle.load(f)
+    print("✅ Model and scaler loaded successfully!")
 except Exception as e:
-    print(f"❌ Error: {e}")
+    print(f"❌ Error loading model: {e}")
 
 @app.route('/')
 def home():
@@ -52,7 +54,9 @@ def predict():
         return render_template('index.html', result=result_message)
     
     except Exception as e:
-        return render_template('index.html', result=f"❌ Error: {str(e)}")
+        error_msg = f"❌ Error: {str(e)}"
+        return render_template('index.html', result=error_msg)
 
-# This is important for Vercel
-app = app
+# Vercel requires this
+if __name__ == '__main__':
+    app.run(debug=True)
